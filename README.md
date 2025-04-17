@@ -321,4 +321,382 @@ United States
 
 Made with ❤️ by [AnshTech Solutions](https://www.anshtechsolutions.tech)
 
-© 2024 AnshTech Solutions. All rights reserved. 
+© 2024 AnshTech Solutions. All rights reserved.
+
+## Pricing Page
+
+The pricing page (`pricing.html`) offers three subscription plans:
+- Basic Plan ($49/visit)
+- Premium Plan ($99/month)
+- Family Plan ($149/month)
+
+### Plan Selection Flow
+
+1. User clicks "Select Plan" on any pricing card
+2. A modal opens with a form to collect:
+   - Full Name
+   - Email Address
+   - Selected Plan
+
+### API Integration
+
+The pricing page integrates with the backend API endpoint:
+
+```
+POST http://localhost:5000/api/plan
+```
+
+#### Request Payload
+```json
+{
+    "name": "string",
+    "email": "string",
+    "planType": "string"
+}
+```
+
+#### Response Handling
+- Success: Shows confirmation message and closes modal
+- Error: Displays error message to user
+
+## Setup
+
+1. Clone the repository
+2. Open `pricing.html` in a web browser
+3. Ensure the backend API is running at `http://localhost:5000`
+
+## Development
+
+To modify the pricing plans or API integration:
+
+1. Edit `pricing.html` for UI changes
+2. Update the JavaScript form submission handler for API changes
+3. Test the changes with the backend API
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Commit your changes
+4. Push to the branch
+5. Create a Pull Request 
+
+## 🔄 Backend API Documentation
+
+### Base URL
+```
+http://localhost:5000
+```
+
+### Authentication
+All endpoints require JWT authentication except for `/api/auth/*` endpoints.
+Include the token in the Authorization header:
+```
+Authorization: Bearer <your_jwt_token>
+```
+
+### Endpoints
+
+#### Authentication
+```
+POST /api/auth/register
+```
+Register a new user
+```json
+Request Body:
+{
+    "name": "string",
+    "email": "string",
+    "password": "string",
+    "phone": "string"
+}
+
+Response:
+{
+    "status": "success",
+    "token": "jwt_token",
+    "user": {
+        "id": "string",
+        "name": "string",
+        "email": "string"
+    }
+}
+```
+
+```
+POST /api/auth/login
+```
+Login user
+```json
+Request Body:
+{
+    "email": "string",
+    "password": "string"
+}
+
+Response:
+{
+    "status": "success",
+    "token": "jwt_token",
+    "user": {
+        "id": "string",
+        "name": "string",
+        "email": "string"
+    }
+}
+```
+
+#### Plans
+```
+POST /api/plan
+```
+Create a new plan subscription
+```json
+Request Body:
+{
+    "name": "string",
+    "email": "string",
+    "planType": "string"
+}
+
+Response:
+{
+    "status": "success",
+    "message": "Plan subscription created successfully",
+    "data": {
+        "id": "string",
+        "name": "string",
+        "email": "string",
+        "planType": "string",
+        "createdAt": "timestamp"
+    }
+}
+```
+
+```
+GET /api/plans
+```
+Get all available plans
+```json
+Response:
+{
+    "status": "success",
+    "data": [
+        {
+            "id": "string",
+            "name": "string",
+            "price": "number",
+            "features": ["string"],
+            "duration": "string"
+        }
+    ]
+}
+```
+
+#### Services
+```
+GET /api/services
+```
+Get all available services
+```json
+Response:
+{
+    "status": "success",
+    "data": [
+        {
+            "id": "string",
+            "name": "string",
+            "description": "string",
+            "image": "string",
+            "category": "string"
+        }
+    ]
+}
+```
+
+```
+GET /api/services/:id
+```
+Get service details
+```json
+Response:
+{
+    "status": "success",
+    "data": {
+        "id": "string",
+        "name": "string",
+        "description": "string",
+        "image": "string",
+        "category": "string",
+        "pricing": {
+            "basic": "number",
+            "premium": "number"
+        },
+        "features": ["string"]
+    }
+}
+```
+
+#### Bookings
+```
+POST /api/bookings
+```
+Create a new booking
+```json
+Request Body:
+{
+    "serviceId": "string",
+    "date": "string",
+    "time": "string",
+    "address": "string",
+    "notes": "string"
+}
+
+Response:
+{
+    "status": "success",
+    "message": "Booking created successfully",
+    "data": {
+        "id": "string",
+        "serviceId": "string",
+        "date": "string",
+        "time": "string",
+        "status": "pending"
+    }
+}
+```
+
+```
+GET /api/bookings
+```
+Get user's bookings
+```json
+Response:
+{
+    "status": "success",
+    "data": [
+        {
+            "id": "string",
+            "service": {
+                "name": "string",
+                "category": "string"
+            },
+            "date": "string",
+            "time": "string",
+            "status": "string"
+        }
+    ]
+}
+```
+
+#### Testimonials
+```
+GET /api/testimonials
+```
+Get all testimonials
+```json
+Response:
+{
+    "status": "success",
+    "data": [
+        {
+            "id": "string",
+            "name": "string",
+            "rating": "number",
+            "comment": "string",
+            "image": "string",
+            "date": "string"
+        }
+    ]
+}
+```
+
+```
+POST /api/testimonials
+```
+Create a new testimonial
+```json
+Request Body:
+{
+    "name": "string",
+    "rating": "number",
+    "comment": "string",
+    "image": "string"
+}
+
+Response:
+{
+    "status": "success",
+    "message": "Testimonial created successfully",
+    "data": {
+        "id": "string",
+        "name": "string",
+        "rating": "number",
+        "comment": "string",
+        "image": "string",
+        "date": "string"
+    }
+}
+```
+
+#### FAQ
+```
+GET /api/faq
+```
+Get all FAQs
+```json
+Response:
+{
+    "status": "success",
+    "data": [
+        {
+            "id": "string",
+            "question": "string",
+            "answer": "string",
+            "category": "string"
+        }
+    ]
+}
+```
+
+### Error Responses
+All endpoints return consistent error responses:
+```json
+{
+    "status": "error",
+    "message": "Error message",
+    "errors": [
+        {
+            "field": "string",
+            "message": "string"
+        }
+    ]
+}
+```
+
+### Status Codes
+- 200: Success
+- 201: Created
+- 400: Bad Request
+- 401: Unauthorized
+- 403: Forbidden
+- 404: Not Found
+- 500: Internal Server Error
+
+### Rate Limiting
+- All endpoints are rate-limited to 100 requests per minute per IP
+- Authentication endpoints are limited to 5 requests per minute per IP
+
+### Data Validation
+- All input data is validated on both client and server side
+- Required fields are marked with *
+- Email format is validated
+- Phone numbers must be in international format
+- Dates must be in ISO format
+
+### Security
+- All endpoints use HTTPS
+- JWT tokens expire after 24 hours
+- Passwords are hashed using bcrypt
+- Input sanitization is performed on all endpoints
+- CORS is enabled for specific origins 
