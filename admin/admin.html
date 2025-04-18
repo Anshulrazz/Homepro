@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HomePro Admin Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        if (localStorage.getItem("isLoggedIn") !== "true") {
+            window.location.href = "/admin/login.html";
+        }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .sidebar {
+            transition: all 0.3s ease;
+        }
+
+        .sidebar.collapsed {
+            width: 80px;
+        }
+
+        .main-content {
+            transition: all 0.3s ease;
+        }
+
+        .main-content.expanded {
+            margin-left: 80px;
+        }
+
+        .loading-spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3498db;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .filter-dropdown {
+            display: none;
+        }
+
+        .filter-dropdown.show {
+            display: block;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100">
+    <!-- Sidebar -->
+    <div class="sidebar fixed h-full bg-white shadow-lg w-64 z-10">
+        <div class="p-4 border-b">
+            <h2 class="text-xl font-bold text-gray-800">HomePro Admin</h2>
+        </div>
+        <nav class="mt-4">
+            <a href="#" class="flex items-center px-4 py-3 text-gray-700 bg-gray-100">
+                <i class="fas fa-home w-6"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="#bookings" class="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-100">
+                <i class="fas fa-calendar-check w-6"></i>
+                <span>Bookings</span>
+            </a>
+            <a href="#plans" class="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-100">
+                <i class="fas fa-users w-6"></i>
+                <span>User Plans</span>
+            </a>
+        </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content ml-64 p-8">
+        <!-- Header -->
+        <div class="flex justify-between items-center mb-8">
+            <h1 class="text-3xl font-bold text-gray-800">Dashboard Overview</h1>
+            <div class="flex items-center space-x-4">
+                <div class="relative">
+                    <input type="text" placeholder="Search..."
+                        class="pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                </div>
+                <button
+                    class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2">
+                    <i class="fas fa-bell"></i>
+                    <span>Notifications</span>
+                </button>
+                <button onclick="logout()" class="bg-red-500 text-white px-4 py-2 rounded">Logout</button>
+                <script>
+                    function logout() {
+                        localStorage.removeItem("isLoggedIn");
+                        window.location.href = "/admin/login.html";
+                    }
+                </script>
+            </div>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="bg-white p-6 rounded-lg shadow">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-500">Total Bookings</p>
+                        <h3 class="text-2xl font-bold" id="totalBookings">0</h3>
+                    </div>
+                    <div class="bg-blue-100 p-3 rounded-full">
+                        <i class="fas fa-calendar-check text-blue-500 text-xl"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-500">Active Plans</p>
+                        <h3 class="text-2xl font-bold" id="activePlans">0</h3>
+                    </div>
+                    <div class="bg-green-100 p-3 rounded-full">
+                        <i class="fas fa-users text-green-500 text-xl"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-500">Pending Bookings</p>
+                        <h3 class="text-2xl font-bold" id="pendingBookings">0</h3>
+                    </div>
+                    <div class="bg-yellow-100 p-3 rounded-full">
+                        <i class="fas fa-clock text-yellow-500 text-xl"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bookings Table -->
+        <div class="bg-white rounded-lg shadow mb-8">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-xl font-semibold text-gray-800">Recent Bookings</h2>
+                    <div class="flex space-x-2">
+                        <div class="relative">
+                            <input type="text" id="bookingSearch" placeholder="Search bookings..."
+                                class="pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                        </div>
+                        <div class="relative">
+                            <button id="bookingFilterBtn"
+                                class="px-4 py-2 bg-gray-100 rounded-lg hover:bg-gray-200 flex items-center">
+                                <i class="fas fa-filter"></i>
+                                <span class="ml-2">Filter</span>
+                            </button>
+                            <div id="bookingFilterDropdown"
+                                class="filter-dropdown absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 z-10">
+                                <div class="px-4 py-2">
+                                    <label class="block text-sm text-gray-700 mb-2">Status</label>
+                                    <select id="bookingStatusFilter" class="w-full border rounded-lg p-2">
+                                        <option value="all">All Status</option>
+                                        <option value="pending">Pending</option>
+                                        <option value="completed">Completed</option>
+                                    </select>
+                                </div>
+                                <div class="px-4 py-2">
+                                    <label class="block text-sm text-gray-700 mb-2">Date Range</label>
+                                    <input type="date" id="bookingDateFrom" class="w-full border rounded-lg p-2 mb-2">
+                                    <input type="date" id="bookingDateTo" class="w-full border rounded-lg p-2">
+                                </div>
+                                <div class="px-4 py-2 border-t">
+                                    <button id="applyBookingFilter"
+                                        class="w-full bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
+                                        Apply
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <button id="exportBookings"
+                            class="px-4 py-2 bg-gray-100 rounded-lg hover:bg-gray-200 flex items-center">
+                            <i class="fas fa-download"></i>
+                            <span class="ml-2">Export</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full">
+                        <thead>
+                            <tr class="bg-gray-50">
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">ID</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Service</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="bookingsTableBody" class="divide-y divide-gray-200">
+                            <tr>
+                                <td colspan="6" class="px-6 py-4 text-center">
+                                    <div class="loading-spinner mx-auto"></div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Plans Table -->
+        <div class="bg-white rounded-lg shadow">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-xl font-semibold text-gray-800">User Plans</h2>
+                    <div class="flex space-x-2">
+                        <div class="relative">
+                            <input type="text" id="planSearch" placeholder="Search plans..."
+                                class="pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                        </div>
+                        <div class="relative">
+                            <button id="planFilterBtn"
+                                class="px-4 py-2 bg-gray-100 rounded-lg hover:bg-gray-200 flex items-center">
+                                <i class="fas fa-filter"></i>
+                                <span class="ml-2">Filter</span>
+                            </button>
+                            <div id="planFilterDropdown"
+                                class="filter-dropdown absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 z-10">
+                                <div class="px-4 py-2">
+                                    <label class="block text-sm text-gray-700 mb-2">Status</label>
+                                    <select id="planStatusFilter" class="w-full border rounded-lg p-2">
+                                        <option value="all">All Status</option>
+                                        <option value="active">Active</option>
+                                        <option value="inactive">Inactive</option>
+                                    </select>
+                                </div>
+                                <div class="px-4 py-2">
+                                    <label class="block text-sm text-gray-700 mb-2">Plan Type</label>
+                                    <select id="planTypeFilter" class="w-full border rounded-lg p-2">
+                                        <option value="all">All Plans</option>
+                                        <option value="basic">Basic</option>
+                                        <option value="premium">Premium</option>
+                                        <option value="enterprise">Enterprise</option>
+                                    </select>
+                                </div>
+                                <div class="px-4 py-2 border-t">
+                                    <button id="applyPlanFilter"
+                                        class="w-full bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
+                                        Apply
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <button id="exportPlans"
+                            class="px-4 py-2 bg-gray-100 rounded-lg hover:bg-gray-200 flex items-center">
+                            <i class="fas fa-download"></i>
+                            <span class="ml-2">Export</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full">
+                        <thead>
+                            <tr class="bg-gray-50">
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">ID</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Email</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Plan</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="plansTableBody" class="divide-y divide-gray-200">
+                            <tr>
+                                <td colspan="6" class="px-6 py-4 text-center">
+                                    <div class="loading-spinner mx-auto"></div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Store original data
+        let originalBookings = [];
+        let originalPlans = [];
+
+        // Search functionality
+        function filterBookings(searchTerm, statusFilter, dateFrom, dateTo) {
+            return originalBookings.filter(booking => {
+                const matchesSearch = !searchTerm ||
+                    booking.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    booking.service.toLowerCase().includes(searchTerm.toLowerCase());
+
+                const matchesStatus = statusFilter === 'all' ||
+                    (statusFilter === 'pending' && !booking.completed) ||
+                    (statusFilter === 'completed' && booking.completed);
+
+                const bookingDate = new Date(booking.createdAt);
+                const matchesDate = (!dateFrom || bookingDate >= new Date(dateFrom)) &&
+                    (!dateTo || bookingDate <= new Date(dateTo));
+
+                return matchesSearch && matchesStatus && matchesDate;
+            });
+        }
+
+        function filterPlans(searchTerm, statusFilter, planTypeFilter) {
+            return originalPlans.filter(plan => {
+                const matchesSearch = !searchTerm ||
+                    plan.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    plan.email.toLowerCase().includes(searchTerm.toLowerCase());
+
+                const matchesStatus = statusFilter === 'all' ||
+                    (statusFilter === 'active' && plan.isActive) ||
+                    (statusFilter === 'inactive' && !plan.isActive);
+
+                const matchesPlanType = planTypeFilter === 'all' ||
+                    plan.planType.toLowerCase() === planTypeFilter.toLowerCase();
+
+                return matchesSearch && matchesStatus && matchesPlanType;
+            });
+        }
+
+        // Export functionality
+        function exportToCSV(data, filename) {
+            if (data.length === 0) {
+                alert('No data to export');
+                return;
+            }
+
+            const headers = Object.keys(data[0]);
+            const csvContent = [
+                headers.join(','),
+                ...data.map(row => headers.map(header => {
+                    const value = row[header];
+                    return typeof value === 'string' ? `"${value}"` : value;
+                }).join(','))
+            ].join('\n');
+
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+
+            link.setAttribute('href', url);
+            link.setAttribute('download', filename);
+            link.style.visibility = 'hidden';
+
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', () => {
+            // Booking search
+            const bookingSearch = document.getElementById('bookingSearch');
+            bookingSearch.addEventListener('input', (e) => {
+                const filteredBookings = filterBookings(
+                    e.target.value,
+                    document.getElementById('bookingStatusFilter').value,
+                    document.getElementById('bookingDateFrom').value,
+                    document.getElementById('bookingDateTo').value
+                );
+                displayBookings(filteredBookings);
+            });
+
+            // Plan search
+            const planSearch = document.getElementById('planSearch');
+            planSearch.addEventListener('input', (e) => {
+                const filteredPlans = filterPlans(
+                    e.target.value,
+                    document.getElementById('planStatusFilter').value,
+                    document.getElementById('planTypeFilter').value
+                );
+                displayPlans(filteredPlans);
+            });
+
+            // Booking filter dropdown
+            const bookingFilterBtn = document.getElementById('bookingFilterBtn');
+            const bookingFilterDropdown = document.getElementById('bookingFilterDropdown');
+            bookingFilterBtn.addEventListener('click', () => {
+                bookingFilterDropdown.classList.toggle('show');
+            });
+
+            // Plan filter dropdown
+            const planFilterBtn = document.getElementById('planFilterBtn');
+            const planFilterDropdown = document.getElementById('planFilterDropdown');
+            planFilterBtn.addEventListener('click', () => {
+                planFilterDropdown.classList.toggle('show');
+            });
+
+            // Apply booking filter
+            document.getElementById('applyBookingFilter').addEventListener('click', () => {
+                const filteredBookings = filterBookings(
+                    bookingSearch.value,
+                    document.getElementById('bookingStatusFilter').value,
+                    document.getElementById('bookingDateFrom').value,
+                    document.getElementById('bookingDateTo').value
+                );
+                displayBookings(filteredBookings);
+                bookingFilterDropdown.classList.remove('show');
+            });
+
+            // Apply plan filter
+            document.getElementById('applyPlanFilter').addEventListener('click', () => {
+                const filteredPlans = filterPlans(
+                    planSearch.value,
+                    document.getElementById('planStatusFilter').value,
+                    document.getElementById('planTypeFilter').value
+                );
+                displayPlans(filteredPlans);
+                planFilterDropdown.classList.remove('show');
+            });
+
+            // Export bookings
+            document.getElementById('exportBookings').addEventListener('click', () => {
+                const filteredBookings = filterBookings(
+                    bookingSearch.value,
+                    document.getElementById('bookingStatusFilter').value,
+                    document.getElementById('bookingDateFrom').value,
+                    document.getElementById('bookingDateTo').value
+                );
+                exportToCSV(filteredBookings, 'bookings.csv');
+            });
+
+            // Export plans
+            document.getElementById('exportPlans').addEventListener('click', () => {
+                const filteredPlans = filterPlans(
+                    planSearch.value,
+                    document.getElementById('planStatusFilter').value,
+                    document.getElementById('planTypeFilter').value
+                );
+                exportToCSV(filteredPlans, 'plans.csv');
+            });
+
+            // Close dropdowns when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!bookingFilterBtn.contains(e.target) && !bookingFilterDropdown.contains(e.target)) {
+                    bookingFilterDropdown.classList.remove('show');
+                }
+                if (!planFilterBtn.contains(e.target) && !planFilterDropdown.contains(e.target)) {
+                    planFilterDropdown.classList.remove('show');
+                }
+            });
+        });
+
+        // Modified fetch functions to store original data
+        async function fetchBookings() {
+            try {
+                const tableBody = document.getElementById('bookingsTableBody');
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="px-6 py-4 text-center">
+                            <div class="loading-spinner mx-auto"></div>
+                        </td>
+                    </tr>
+                `;
+
+                const response = await fetch('http://localhost:5000/api/contact');
+                originalBookings = await response.json();
+
+                displayBookings(originalBookings);
+                return originalBookings;
+            } catch (error) {
+                console.error('Error fetching bookings:', error);
+                const tableBody = document.getElementById('bookingsTableBody');
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="px-6 py-4 text-center text-red-500">
+                            Error loading bookings. Please try again later.
+                        </td>
+                    </tr>
+                `;
+                return [];
+            }
+        }
+
+        async function fetchPlans() {
+            try {
+                const tableBody = document.getElementById('plansTableBody');
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="px-6 py-4 text-center">
+                            <div class="loading-spinner mx-auto"></div>
+                        </td>
+                    </tr>
+                `;
+
+                const response = await fetch('http://localhost:5000/api/plan');
+                originalPlans = await response.json();
+
+                displayPlans(originalPlans);
+                return originalPlans;
+            } catch (error) {
+                console.error('Error fetching plans:', error);
+                const tableBody = document.getElementById('plansTableBody');
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="px-6 py-4 text-center text-red-500">
+                            Error loading plans. Please try again later.
+                        </td>
+                    </tr>
+                `;
+                return [];
+            }
+        }
+
+        // Helper functions to display filtered data
+        function displayBookings(bookings) {
+            const tableBody = document.getElementById('bookingsTableBody');
+            tableBody.innerHTML = '';
+
+            bookings.forEach(booking => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td class="px-6 py-4">#${booking._id || 'N/A'}</td>
+                    <td class="px-6 py-4">${booking.name || 'N/A'}</td>
+                    <td class="px-6 py-4">${booking.service || 'N/A'}</td>
+                    <td class="px-6 py-4">${new Date(booking.createdAt).toLocaleDateString() || 'N/A'}</td>
+                    <td class="px-6 py-4">
+                        <span class="px-2 py-1 text-xs rounded-full ${getStatusClass(booking.completed)}">
+                            ${booking.completed ? 'Completed' : 'Pending'}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4">
+                        ${!booking.completed ?
+                        `<button onclick="markAsComplete('${booking._id}')" 
+                                class="flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg text-sm transition-all duration-200">
+                                <i class="fas fa-check"></i>
+                                Complete
+                            </button>` :
+                        ''}
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        function displayPlans(plans) {
+            const tableBody = document.getElementById('plansTableBody');
+            tableBody.innerHTML = '';
+
+            plans.forEach(plan => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td class="px-6 py-4">#${plan._id || 'N/A'}</td>
+                    <td class="px-6 py-4">${plan.name || 'N/A'}</td>
+                    <td class="px-6 py-4">${plan.email || 'N/A'}</td>
+                    <td class="px-6 py-4">${plan.planType || 'N/A'}</td>
+                    <td class="px-6 py-4">
+                        <span class="px-2 py-1 text-xs rounded-full ${getPlanStatusClass(plan.isActive)}">
+                            ${plan.isActive ? 'Active' : 'Inactive'}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4">
+                        <button onclick="togglePlanStatus('${plan._id}', ${!plan.isActive})" 
+                            class="flex items-center gap-2 ${plan.isActive ? 'bg-red-500 hover:bg-red-600' : 'bg-green-500 hover:bg-green-600'} 
+                            text-white px-4 py-2 rounded-lg text-sm transition-all duration-200">
+                            ${plan.isActive ?
+                        '<i class="fas fa-times"></i> Deactivate' :
+                        '<i class="fas fa-check"></i> Activate'}
+                        </button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        // Function to update stats
+        function updateStats(bookings, plans) {
+            document.getElementById('totalBookings').textContent = bookings.length;
+            document.getElementById('activePlans').textContent = plans.filter(plan => plan.isActive).length;
+            document.getElementById('pendingBookings').textContent = bookings.filter(booking => !booking.completed).length;
+        }
+
+        // Function to mark a booking as complete
+        async function markAsComplete(bookingId) {
+            try {
+                const button = event.target.closest('button');
+                const originalText = button.innerHTML;
+                button.innerHTML = '<div class="loading-spinner"></div>';
+                button.disabled = true;
+
+                const response = await fetch(`http://localhost:5000/api/contact/complete/${bookingId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    const [bookings, plans] = await Promise.all([fetchBookings(), fetchPlans()]);
+                    updateStats(bookings, plans);
+                } else {
+                    throw new Error('Failed to update booking status');
+                }
+            } catch (error) {
+                console.error('Error updating booking:', error);
+                alert('Failed to update booking status. Please try again.');
+            }
+        }
+
+        // Function to toggle plan status
+        async function togglePlanStatus(planId, activate) {
+            try {
+                const button = event.target.closest('button');
+                const originalText = button.innerHTML;
+                button.innerHTML = '<div class="loading-spinner"></div>';
+                button.disabled = true;
+
+                const response = await fetch(`http://localhost:5000/api/plan/activate/${planId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ active: activate })
+                });
+
+                if (response.ok) {
+                    const [bookings, plans] = await Promise.all([fetchBookings(), fetchPlans()]);
+                    updateStats(bookings, plans);
+                } else {
+                    throw new Error('Failed to update plan status');
+                }
+            } catch (error) {
+                console.error('Error updating plan:', error);
+                alert('Failed to update plan status. Please try again.');
+            }
+        }
+
+        // Helper function to get status class based on booking status
+        function getStatusClass(completed) {
+            return completed ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800';
+        }
+
+        // Helper function to get status class based on plan status
+        function getPlanStatusClass(active) {
+            return active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800';
+        }
+
+        // Fetch data when the page loads
+        document.addEventListener('DOMContentLoaded', async () => {
+            const [bookings, plans] = await Promise.all([fetchBookings(), fetchPlans()]);
+            updateStats(bookings, plans);
+        });
+
+        // Refresh data every 30 seconds
+        setInterval(async () => {
+            const [bookings, plans] = await Promise.all([fetchBookings(), fetchPlans()]);
+            updateStats(bookings, plans);
+        }, 30000);
+    </script>
+</body>
+
+</html>

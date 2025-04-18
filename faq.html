@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frequently Asked Questions - HomePro Services</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="bg-gray-50">
+    <header class="bg-white shadow-md">
+        <nav class="container mx-auto px-4 py-4">
+            <div class="flex justify-between items-center">
+                <div class="text-2xl font-bold text-blue-600">HomePro</div>
+                <ul class="hidden md:flex space-x-8">
+                    <li><a href="index.html" class="text-gray-600 hover:text-blue-600">Home</a></li>
+                    <li><a href="services.html" class="text-gray-600 hover:text-blue-600">Services</a></li>
+                    <li><a href="pricing.html" class="text-gray-600 hover:text-blue-600">Pricing</a></li>
+                    <li><a href="testimonials.html" class="text-gray-600 hover:text-blue-600">Testimonials</a></li>
+                    <li><a href="faq.html" class="text-blue-600 font-semibold">FAQ</a></li>
+                    <li><a href="about.html" class="text-gray-600 hover:text-blue-600">About</a></li>
+                    <li><a href="contact.html" class="text-gray-600 hover:text-blue-600">Contact</a></li>
+                </ul>
+                <div class="md:hidden">
+                    <button class="text-gray-600">
+                        <i class="fas fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <section class="bg-blue-600 text-white py-16">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-4xl font-bold mb-4">Frequently Asked Questions</h1>
+            <p class="text-xl">Find answers to common questions about our services</p>
+        </div>
+    </section>
+
+    <section class="py-8">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-wrap justify-center gap-4">
+                <button class="category-button bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700 transition-colors" data-category="general">General</button>
+                <button class="category-button bg-gray-200 text-gray-700 px-6 py-2 rounded-full hover:bg-gray-300 transition-colors" data-category="services">Services</button>
+                <button class="category-button bg-gray-200 text-gray-700 px-6 py-2 rounded-full hover:bg-gray-300 transition-colors" data-category="pricing">Pricing</button>
+                <button class="category-button bg-gray-200 text-gray-700 px-6 py-2 rounded-full hover:bg-gray-300 transition-colors" data-category="booking">Booking</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="container mx-auto px-4 py-8">
+        <div class="faq-category active" id="general">
+            <div class="bg-white rounded-lg shadow-md mb-4">
+                <div class="p-6 cursor-pointer">
+                    <div class="flex justify-between items-center">
+                        <h3 class="text-xl font-semibold">What areas do you service?</h3>
+                        <i class="fas fa-chevron-down text-gray-500"></i>
+                    </div>
+                    <div class="mt-4 text-gray-600">
+                        <p>We service the entire metropolitan area and surrounding suburbs. Contact us to confirm if we cover your specific location.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-md mb-4">
+                <div class="p-6 cursor-pointer">
+                    <div class="flex justify-between items-center">
+                        <h3 class="text-xl font-semibold">Are your technicians licensed and insured?</h3>
+                        <i class="fas fa-chevron-down text-gray-500"></i>
+                    </div>
+                    <div class="mt-4 text-gray-600">
+                        <p>Yes, all our technicians are fully licensed, insured, and undergo regular training to maintain the highest standards of service.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-md mb-4">
+                <div class="p-6 cursor-pointer">
+                    <div class="flex justify-between items-center">
+                        <h3 class="text-xl font-semibold">What are your business hours?</h3>
+                        <i class="fas fa-chevron-down text-gray-500"></i>
+                    </div>
+                    <div class="mt-4 text-gray-600">
+                        <p>We operate 24/7 for emergency services. For non-emergency services, our regular business hours are Monday to Sunday, 7:00 AM to 9:00 PM.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="faq-category hidden" id="services">
+            <div class="bg-white rounded-lg shadow-md mb-4">
+                <div class="p-6 cursor-pointer">
+                    <div class="flex justify-between items-center">
+                        <h3 class="text-xl font-semibold">What types of services do you offer?</h3>
+                        <i class="fas fa-chevron-down text-gray-500"></i>
+                    </div>
+                    <div class="mt-4 text-gray-600">
+                        <p>We offer a wide range of home services including plumbing, electrical, HVAC, and general maintenance. Visit our Services page for a complete list.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-md mb-4">
+                <div class="p-6 cursor-pointer">
+                    <div class="flex justify-between items-center">
+                        <h3 class="text-xl font-semibold">Do you offer emergency services?</h3>
+                        <i class="fas fa-chevron-down text-gray-500"></i>
+                    </div>
+                    <div class="mt-4 text-gray-600">
+                        <p>Yes, we provide 24/7 emergency services for all our service categories. We guarantee a response within 30 minutes for emergency calls.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-md mb-4">
+                <div class="p-6 cursor-pointer">
+                    <div class="flex justify-between items-center">
+                        <h3 class="text-xl font-semibold">Do you provide warranties on your services?</h3>
+                        <i class="fas fa-chevron-down text-gray-500"></i>
+                    </div>
+                    <div class="mt-4 text-gray-600">
+                        <p>Yes, we offer a 1-year warranty on all our services and a 5-year warranty on major installations. Warranty details are provided with each service.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="faq-category hidden" id="pricing">
+            <div class="bg-white rounded-lg shadow-md mb-4">
+                <div class="p-6 cursor-pointer">
+                    <div class="flex justify-between items-center">
+                        <h3 class="text-xl font-semibold">How are your prices determined?</h3>
+                        <i class="fas fa-chevron-down text-gray-500"></i>
+                    </div>
+                    <div class="mt-4 text-gray-600">
+                        <p>Our prices are based on the type of service, complexity of the job, and materials required. We provide transparent pricing with no hidden fees.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-md mb-4">
+                <div class="p-6 cursor-pointer">
+                    <div class="flex justify-between items-center">
+                        <h3 class="text-xl font-semibold">Do you offer any discounts?</h3>
+                        <i class="fas fa-chevron-down text-gray-500"></i>
+                    </div>
+                    <div class="mt-4 text-gray-600">
+                        <p>Yes, we offer various discounts including senior discounts, military discounts, and seasonal promotions. Check our Pricing page for current offers.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-md mb-4">
+                <div class="p-6 cursor-pointer">
+                    <div class="flex justify-between items-center">
+                        <h3 class="text-xl font-semibold">What payment methods do you accept?</h3>
+                        <i class="fas fa-chevron-down text-gray-500"></i>
+                    </div>
+                    <div class="mt-4 text-gray-600">
+                        <p>We accept all major credit cards, debit cards, cash, and checks. We also offer financing options for larger projects.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="faq-category hidden" id="booking">
+            <div class="bg-white rounded-lg shadow-md mb-4">
+                <div class="p-6 cursor-pointer">
+                    <div class="flex justify-between items-center">
+                        <h3 class="text-xl font-semibold">How do I book a service?</h3>
+                        <i class="fas fa-chevron-down text-gray-500"></i>
+                    </div>
+                    <div class="mt-4 text-gray-600">
+                        <p>You can book a service through our website, by phone, or through our mobile app. We'll schedule a convenient time for your service.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-md mb-4">
+                <div class="p-6 cursor-pointer">
+                    <div class="flex justify-between items-center">
+                        <h3 class="text-xl font-semibold">What information do I need to provide when booking?</h3>
+                        <i class="fas fa-chevron-down text-gray-500"></i>
+                    </div>
+                    <div class="mt-4 text-gray-600">
+                        <p>When booking, please provide your contact information, service address, type of service needed, and any specific details about the issue.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-md mb-4">
+                <div class="p-6 cursor-pointer">
+                    <div class="flex justify-between items-center">
+                        <h3 class="text-xl font-semibold">Can I reschedule or cancel my appointment?</h3>
+                        <i class="fas fa-chevron-down text-gray-500"></i>
+                    </div>
+                    <div class="mt-4 text-gray-600">
+                        <p>Yes, you can reschedule or cancel your appointment up to 24 hours before the scheduled time without any charges.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="bg-blue-600 text-white py-16">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-3xl font-bold mb-4">Still Have Questions?</h2>
+            <p class="text-xl mb-8">Contact us directly for personalized assistance</p>
+            <a href="contact.html" class="bg-white text-blue-600 px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition-colors">Contact Us</a>
+        </div>
+    </section>
+
+    <footer class="bg-gray-800 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="footer-section">
+                    <h3 class="text-xl font-bold mb-4">HomePro Services</h3>
+                    <p class="mb-4">Your trusted partner for home maintenance</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-white hover:text-blue-400"><i class="fab fa-facebook text-2xl"></i></a>
+                        <a href="#" class="text-white hover:text-blue-400"><i class="fab fa-twitter text-2xl"></i></a>
+                        <a href="#" class="text-white hover:text-blue-400"><i class="fab fa-instagram text-2xl"></i></a>
+                        <a href="#" class="text-white hover:text-blue-400"><i class="fab fa-linkedin text-2xl"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h3 class="text-xl font-bold mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="hover:text-blue-400">Home</a></li>
+                        <li><a href="services.html" class="hover:text-blue-400">Services</a></li>
+                        <li><a href="pricing.html" class="hover:text-blue-400">Pricing</a></li>
+                        <li><a href="testimonials.html" class="hover:text-blue-400">Testimonials</a></li>
+                        <li><a href="faq.html" class="hover:text-blue-400">FAQ</a></li>
+                        <li><a href="about.html" class="hover:text-blue-400">About</a></li>
+                        <li><a href="contact.html" class="hover:text-blue-400">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3 class="text-xl font-bold mb-4">Contact Info</h3>
+                    <div class="space-y-2">
+                        <p class="flex items-center"><i class="fas fa-phone mr-2"></i> +1 234 567 890</p>
+                        <p class="flex items-center"><i class="fas fa-envelope mr-2"></i> info@homepro.com</p>
+                        <p class="flex items-center"><i class="fas fa-map-marker-alt mr-2"></i> 123 Service St, City</p>
+                        <p class="flex items-center"><i class="fas fa-clock mr-2"></i> Mon-Sun: 24/7</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container mx-auto px-4 mt-8 pt-8 border-t border-gray-700">
+            <p class="text-center">&copy; 2024 HomePro Services. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // FAQ Category Toggle
+        document.querySelectorAll('.category-button').forEach(button => {
+            button.addEventListener('click', () => {
+                // Remove active class from all buttons
+                document.querySelectorAll('.category-button').forEach(btn => {
+                    btn.classList.remove('bg-blue-600', 'text-white');
+                    btn.classList.add('bg-gray-200', 'text-gray-700');
+                });
+                
+                // Add active class to clicked button
+                button.classList.remove('bg-gray-200', 'text-gray-700');
+                button.classList.add('bg-blue-600', 'text-white');
+                
+                // Hide all categories
+                document.querySelectorAll('.faq-category').forEach(category => {
+                    category.classList.add('hidden');
+                });
+                
+                // Show selected category
+                const categoryId = button.getAttribute('data-category');
+                document.getElementById(categoryId).classList.remove('hidden');
+            });
+        });
+
+        // FAQ Accordion
+        document.querySelectorAll('.faq-item').forEach(item => {
+            const question = item.querySelector('.faq-question');
+            const answer = item.querySelector('.faq-answer');
+            
+            question.addEventListener('click', () => {
+                const isOpen = answer.classList.contains('hidden');
+                
+                // Close all answers
+                document.querySelectorAll('.faq-answer').forEach(ans => {
+                    ans.classList.add('hidden');
+                });
+                
+                // Toggle current answer
+                if (isOpen) {
+                    answer.classList.remove('hidden');
+                }
+            });
+        });
+    </script>
+</body>
+</html> 

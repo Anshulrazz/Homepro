@@ -75,12 +75,12 @@ homepro-services/
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/homepro-services.git
+   git clone https://github.com/Anshulrazz/Homepro.git
    ```
 
 2. Navigate to the project directory:
    ```bash
-   cd homepro-services
+   cd Backend
    ```
 
 3. Install dependencies:
@@ -96,7 +96,7 @@ homepro-services/
 
 5. Start the development server:
    ```bash
-   npm start
+   npm run dev
    ```
 
 6. Open your browser and visit:
